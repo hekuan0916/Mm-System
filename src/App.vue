@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    APP
+    <router-view></router-view>
   </div>
 </template>
 
@@ -8,4 +8,17 @@
 export default {}
 </script>
 
-<style></style>
+<style lang="less">
+* {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  box-sizing: border-box;
+}
+body,
+html,
+.app {
+  height: 100%;
+  width: 100%;
+}
+</style>
