@@ -35,7 +35,9 @@
               >
               </el-input
             ></el-col>
-            <el-col :span="8"> <img src="@/assets/img/key.jpg" alt=""/></el-col>
+            <el-col :span="8">
+              <img @click="clickCode" v-if="bol" :src="codeURL" alt=""
+            /></el-col>
           </el-row>
         </el-form-item>
         <el-form-item prop="isCheck">
@@ -51,34 +53,51 @@
             >登录</el-button
           >
           <br />
-          <el-button class="btn" type="primary" round>注册</el-button>
+          <el-button class="btn" type="primary" round @click="showRegister"
+            >注册</el-button
+          >
         </el-form-item>
       </el-form>
     </div>
     <div class="right">
       <img src="@/assets/img/login_banner_ele.png" alt />
     </div>
+    <register ref="register"></register>
   </div>
 </template>
-
 <script>
+import register from './register'
+import { toLogin } from '@/api/login'
+// eslint-disable-next-line no-unused-vars
+import { saveToken } from '@/utils/local'
 export default {
   name: 'login',
+  components: {
+    register
+  },
   data () {
     return {
+      bol: true,
+      codeURL: process.env.VUE_APP_URL + '/captcha?type=login',
       form: {
         phone: '', // 手机号
         password: '', // 密码
         code: '', // 验证码
-        isCheck: []
+        isCheck: ''
       },
       rules: {
         phone: [
           { required: true, message: '请输入手机号！', trigger: 'blur' },
           {
-            min: 3,
-            max: 11,
-            message: '请输入11位数字的手机号码!',
+            validator: (rule, value, callback) => {
+              const reg = /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/
+              if (reg.test(value)) {
+                callback()
+              } else {
+                // eslint-disable-next-line standard/no-callback-literal
+                callback('请输入正确的手机号码~')
+              }
+            },
             trigger: 'change'
           }
         ],
@@ -100,21 +119,54 @@ export default {
             trigger: 'change'
           }
         ],
-        isCheck: [{ required: true, message: '请勾选', trigger: 'change' }]
+        isCheck: [
+          { required: true, message: '请勾选', trigger: 'change' },
+          {
+            validator: (rule, value, callback) => {
+              // eslint-disable-next-line eqeqeq
+              if (value == true) {
+                callback()
+              } else {
+                // eslint-disable-next-line standard/no-callback-literal
+                callback('请勾选')
+              }
+            },
+            trigger: 'change'
+          }
+        ]
       }
     }
   },
   methods: {
+    // 刷新验证码
+    clickCode () {
+      this.bol = false
+      // 静默刷新
+      this.$nextTick(() => {
+        this.bol = true
+      })
+    },
+    // 表单提交
     submitForm () {
       window.console.log(this.form)
       this.$refs.form.validate(res => {
         if (res) {
-          this.$message.success('你成功啦')
+          toLogin(this.form).then(res => {
+            window.console.log('登录成功', res)
+            saveToken(res.data.token)
+            this.$router.push('/layout')
+            this.$message.success('登录成功')
+          })
         } else {
           this.$message.error('这是一个错误哦！！')
           return false
         }
       })
+    },
+    // 打开注册页面
+    showRegister () {
+      // 父调用子组件
+      this.$refs.register.isShow = true
     }
   }
 }
