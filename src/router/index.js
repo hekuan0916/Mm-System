@@ -2,6 +2,11 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import login from '@/views/login/login.vue'
 import layout from '@/views/layout/layout.vue'
+import chart from '@/views/layout/chart/chart.vue'
+import subject from '@/views/layout/subject/subject.vue'
+import business from '@/views/layout/business/business.vue'
+import question from '@/views/layout/question/question.vue'
+import userList from '@/views/layout/userList/userList.vue'
 
 Vue.use(VueRouter)
 
@@ -17,7 +22,30 @@ const routes = [
   {
     path: '/layout',
     // eslint-disable-next-line no-undef
-    component: layout
+    component: layout,
+    redirect: '/layout/subject',
+    children: [
+      {
+        path: 'chart',
+        component: chart
+      },
+      {
+        path: 'subject',
+        component: subject
+      },
+      {
+        path: 'business',
+        component: business
+      },
+      {
+        path: 'question',
+        component: question
+      },
+      {
+        path: 'userList',
+        component: userList
+      }
+    ]
   }
   // {
   //   path: '/about',

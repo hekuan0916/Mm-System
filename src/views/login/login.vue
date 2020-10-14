@@ -69,11 +69,17 @@
 import register from './register'
 import { toLogin } from '@/api/login'
 // eslint-disable-next-line no-unused-vars
-import { saveToken } from '@/utils/local'
+import { saveToken, getToken } from '@/utils/local'
 export default {
   name: 'login',
   components: {
     register
+  },
+  created () {
+    // 已有token 跳转至layout
+    if (getToken()) {
+      this.$router.push('/layout')
+    }
   },
   data () {
     return {
