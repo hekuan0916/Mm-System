@@ -5,11 +5,10 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    // 用户信息
+    userInfo: {}
   },
-  mutations: {
-  },
-  actions: {
-  },
-  modules: {
-  }
+  mutations: {},
+  actions: {},
+  modules: {}
 })

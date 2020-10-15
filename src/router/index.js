@@ -29,23 +29,43 @@ const routes = [
     children: [
       {
         path: 'chart',
-        component: chart
+        component: chart,
+        // 路由源信息
+        meta: {
+          title: '数据概览'
+        }
       },
       {
         path: 'subject',
-        component: subject
+        component: subject,
+        // 路由源信息
+        meta: {
+          title: '学科列表'
+        }
       },
       {
         path: 'business',
-        component: business
+        component: business,
+        // 路由源信息
+        meta: {
+          title: '企业列表'
+        }
       },
       {
         path: 'question',
-        component: question
+        component: question,
+        // 路由源信息
+        meta: {
+          title: '题库列表'
+        }
       },
       {
         path: 'userList',
-        component: userList
+        component: userList,
+        // 路由源信息
+        meta: {
+          title: '用户列表'
+        }
       }
     ]
   }
@@ -72,7 +92,7 @@ router.beforeEach((to, from, next) => {
   next()
 })
 router.afterEach((to, from) => {
-  // to and from are both route objects.
+  document.title = to.meta.title
   Nprogress.done()
 })
 

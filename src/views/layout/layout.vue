@@ -10,12 +10,12 @@
         <li class="mid"></li>
         <li class="avator">
           <img
-            v-if="userInfo != ''"
-            :src="baseUrl + '/' + userInfo.avatar"
+            v-if="$store.state.userInfo != ''"
+            :src="baseUrl + '/' + $store.state.userInfo.avatar"
             alt=""
           />
         </li>
-        <li class="name">{{ userInfo.username }}</li>
+        <li class="name">{{ $store.state.userInfo.username }}</li>
         <li><el-button type="primary" @click="exit">退出</el-button></li>
       </ul>
     </el-header>
@@ -69,7 +69,7 @@ export default {
   },
   created () {
     getUserInfo().then(res => {
-      this.userInfo = res.data
+      this.$store.state.userInfo = res.data
       window.console.log('用户信心', res)
     })
   },
