@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import Nprogress from 'nprogress'
+import 'nprogress/nprogress.css'
 import login from '@/views/login/login.vue'
 import layout from '@/views/layout/layout.vue'
 import chart from '@/views/layout/chart/chart.vue'
@@ -61,6 +63,17 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+// 路由前置守卫
+router.beforeEach((to, from, next) => {
+  // to and from are both route objects. must call `next`.
+  Nprogress.start()
+  next()
+})
+router.afterEach((to, from) => {
+  // to and from are both route objects.
+  Nprogress.done()
 })
 
 export default router
