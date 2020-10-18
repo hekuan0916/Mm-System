@@ -15,7 +15,11 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    redirect: '/login'
+    redirect: '/login',
+    meta: {
+      title: '登录',
+      rules: ['超级管理员', '管理员', '老师', '学生']
+    }
   },
   {
     path: '/login',
@@ -32,7 +36,8 @@ const routes = [
         component: chart,
         // 路由源信息
         meta: {
-          title: '数据概览'
+          title: '数据概览',
+          rules: ['超级管理员', '管理员', '老师']
         }
       },
       {
@@ -40,7 +45,8 @@ const routes = [
         component: subject,
         // 路由源信息
         meta: {
-          title: '学科列表'
+          title: '学科列表',
+          rules: ['超级管理员', '管理员', '老师', '学生']
         }
       },
       {
@@ -48,7 +54,8 @@ const routes = [
         component: business,
         // 路由源信息
         meta: {
-          title: '企业列表'
+          title: '企业列表',
+          rules: ['超级管理员', '管理员', '老师']
         }
       },
       {
@@ -56,7 +63,8 @@ const routes = [
         component: question,
         // 路由源信息
         meta: {
-          title: '题库列表'
+          title: '题库列表',
+          rules: ['超级管理员', '管理员', '老师']
         }
       },
       {
@@ -64,7 +72,8 @@ const routes = [
         component: userList,
         // 路由源信息
         meta: {
-          title: '用户列表'
+          title: '用户列表',
+          rules: ['超级管理员', '管理员']
         }
       }
     ]
