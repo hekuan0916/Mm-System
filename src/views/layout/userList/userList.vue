@@ -1,7 +1,5 @@
 <template>
-  <div class="userList">
-    我说userList
-  </div>
+  <div class="userList"></div>
 </template>
 
 <script>
