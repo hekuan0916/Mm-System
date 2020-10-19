@@ -1,5 +1,6 @@
 <template>
   <div class="subject">
+    <!-- 表单 -->
     <el-card>
       <el-form
         inline
@@ -45,12 +46,9 @@
         </el-form-item>
       </el-form>
     </el-card>
+    <!-- 表格 -->
     <el-card class="elTable">
-      <el-table
-        :data="tableData"
-        style="width: 100%"
-        :row-class-name="tableRowClassName"
-      >
+      <el-table :data="tableData" style="width: 100%">
         <el-table-column label="序号" width="50">
           <template v-slot="scope">
             {{
@@ -88,13 +86,14 @@
         </el-table-column>
       </el-table>
     </el-card>
+    <!-- 页码 -->
     <el-card>
       <el-pagination
         class="pagination"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="pagination.currentPage"
-        :page-sizes="[10, 20, 30, 40]"
+        :page-sizes="[1, 10, 20, 30, 40]"
         :page-size="pagination.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="pagination.total"
@@ -176,14 +175,14 @@ export default {
       window.console.log('当期页码', page)
     },
     // 表格状态
-    tableRowClassName ({ row, rowIndex }) {
-      if (rowIndex === 1) {
-        return 'warning-row'
-      } else if (rowIndex === 3) {
-        return 'success-row'
-      }
-      return ''
-    },
+    // tableRowClassName ({ row, rowIndex }) {
+    //   if (rowIndex === 1) {
+    //     return 'warning-row'
+    //   } else if (rowIndex === 3) {
+    //     return 'success-row'
+    //   }
+    //   return ''
+    // },
     // 表单搜索
     search () {
       this.pagination.currentPage = 1

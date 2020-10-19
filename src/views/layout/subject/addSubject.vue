@@ -1,26 +1,21 @@
 /* eslint-disable eqeqeq */
 <template>
-  <el-dialog
-    class="subjectAdd"
-    title="收货地址"
-    :visible.sync="dialogFormVisible"
-    width="500px"
-  >
+  <el-dialog class="subjectAdd" :visible.sync="dialogFormVisible" width="500px">
     <div slot="title" class="title">新增学科</div>
-    <el-form :model="form" :rules="rules" ref="form">
-      <el-form-item prop="rid" label="学科编号" label-width="100px">
+    <el-form :model="form" :rules="rules" ref="form" label-width="100px">
+      <el-form-item prop="rid" label="学科编号">
         <el-input v-model="form.rid"></el-input>
       </el-form-item>
-      <el-form-item prop="name" label="学科名称" label-width="100px">
+      <el-form-item prop="name" label="学科名称">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
-      <el-form-item prop="short_name" label="学科简称" label-width="100px">
+      <el-form-item prop="short_name" label="学科简称">
         <el-input v-model="form.short_name"></el-input>
       </el-form-item>
-      <el-form-item prop="intro" label="学科介绍" label-width="100px">
+      <el-form-item prop="intro" label="学科介绍">
         <el-input v-model="form.intro"></el-input>
       </el-form-item>
-      <el-form-item prop="remark" label="学科备注" label-width="100px">
+      <el-form-item prop="remark" label="学科备注">
         <el-input v-model="form.remark"></el-input>
       </el-form-item>
     </el-form>

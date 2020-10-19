@@ -70,8 +70,7 @@ export default {
   created () {
     getUserInfo().then(res => {
       this.$store.state.userInfo = res.data
-      this.$store.state.roles = res.data.role
-      window.console.log('用户信息', res)
+      // window.console.log('用户信心', res)
     })
   },
   methods: {
@@ -95,6 +94,7 @@ export default {
 .container {
   height: 100%;
   .header {
+    background: rgba(232, 233, 236, 1);
     .header-ul {
       display: flex;
       align-items: center;
@@ -133,7 +133,7 @@ export default {
     }
   }
   .main {
-    background: rgba(232, 233, 236, 1);
+    background-color: gray;
   }
   .el-menu-vertical-demo:not(.el-menu--collapse) {
     width: 200px;
