@@ -1,7 +1,7 @@
 <template>
   <el-dialog :visible.sync="dialogFormVisible" class="addUser" width="500px">
     <div slot="title" class="title">
-      新增用户
+      {{ modeSon == 'edit' ? '编辑用户' : '新增用户' }}
     </div>
     <el-form :model="form" label-width="80px" :rules="rules" ref="form">
       <el-form-item label="用户名">
@@ -15,10 +15,10 @@
       </el-form-item>
       <el-form-item label="角色">
         <el-select v-model="form.role_id" placeholder="请选择角色">
-          <el-option label="超级管理员" value="1"></el-option>
-          <el-option label="管理员" value="2"></el-option>
-          <el-option label="教师" value="3"></el-option>
-          <el-option label="学生" value="4"></el-option>
+          <el-option label="超级管理员" value="1">超级管理员</el-option>
+          <el-option label="管理员" value="2">管理员</el-option>
+          <el-option label="教师" value="3">教师</el-option>
+          <el-option label="学生" value="4">学生</el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="状态">

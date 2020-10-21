@@ -1,5 +1,5 @@
 <template>
-  <el-container class="container">
+  <el-container class="container" v-if="isShow">
     <el-header class="header">
       <ul class="header-ul">
         <li @click="isCollapse = !isCollapse" class="el-icon-s-fold iCon"></li>
@@ -27,11 +27,19 @@
           class="el-menu-vertical-demo"
           router
         >
-          <el-menu-item index="/layout/chart">
-            <i class="el-icon-pie-chart"></i>
-            <span slot="title">数据概览</span>
-          </el-menu-item>
-          <el-menu-item index="/layout/userList">
+          <template
+            v-for="(item, index) in this.$router.options.routes[2].children"
+          >
+            <el-menu-item
+              :index="item.path"
+              :key="index"
+              v-if="item.meta.roles.includes($store.state.role)"
+            >
+              <i :class="item.meta.icon"></i>
+              <span slot="title">{{ item.meta.title }}</span>
+            </el-menu-item>
+          </template>
+          <!-- <el-menu-item index="/layout/userList">
             <i class="el-icon-user"></i>
             <span slot="title">用户列表</span>
           </el-menu-item>
@@ -46,7 +54,7 @@
           <el-menu-item index="/layout/subject">
             <i class="el-icon-notebook-2"></i>
             <span slot="title">学科列表</span>
-          </el-menu-item>
+          </el-menu-item> -->
         </el-menu>
       </el-aside>
       <el-container>
@@ -62,6 +70,7 @@ import { removeToken } from '@/utils/local'
 export default {
   data () {
     return {
+      isShow: false,
       userInfo: '',
       isCollapse: false,
       baseUrl: process.env.VUE_APP_URL
@@ -70,7 +79,25 @@ export default {
   created () {
     getUserInfo().then(res => {
       this.$store.state.userInfo = res.data
+      this.$store.state.role = res.data.role
+      this.isShow = true
+      // 执行判断
+      // 当前理由是否有权限让该角色,访问的处理
+      if (this.$route.meta.roles.includes(this.$store.state.role) === false) {
+        this.$message.error('您无权访问该页面')
+        removeToken()
+        this.$router.push('/login')
+      }
+      // eslint-disable-next-line eqeqeq
+      if (res.data.status == 0) {
+        this.$message.error('账号被禁用,请联系管理员')
+        // 清理Token
+        removeToken()
+        // 跳转登录页
+        this.$router.push('/login')
+      }
       // window.console.log('用户信心', res)
+      // window.console.log('路由信息', this.$router)
     })
   },
   methods: {

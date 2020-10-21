@@ -28,7 +28,12 @@
         <el-form-item>
           <el-button type="primary" @click="search">查询</el-button>
           <el-button type="primary" @click="reset">重置</el-button>
-          <el-button type="primary" @click="addUser">╋ 新增用户</el-button>
+          <el-button
+            type="primary"
+            @click="addUser"
+            v-if="['超级管理员', '管理员'].includes($store.state.role)"
+            >╋ 新增用户</el-button
+          >
         </el-form-item>
       </el-form>
     </el-card>
@@ -56,11 +61,28 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="250">
           <template slot-scope="scope">
-            <el-button @click="edit(scope.row)" size="small">编辑</el-button>
-            <el-button size="small" @click="setStatus(scope.row.id)">{{
-              scope.row.status == 1 ? '禁用' : '启用'
-            }}</el-button>
-            <el-button size="small" @click="del(scope.row.id)">删除</el-button>
+            <el-button
+              @click="edit(scope.row)"
+              size="small"
+              v-if="
+                ['超级管理员', '管理员', '老师'].includes($store.state.role)
+              "
+              >编辑</el-button
+            >
+            <el-button
+              size="small"
+              @click="setStatus(scope.row.id)"
+              v-if="
+                ['超级管理员', '管理员', '老师'].includes($store.state.role)
+              "
+              >{{ scope.row.status == 1 ? '禁用' : '启用' }}</el-button
+            >
+            <el-button
+              size="small"
+              v-if="$store.state.role.includes('管理员')"
+              @click="del(scope.row.id)"
+              >删除</el-button
+            >
           </template>
         </el-table-column>
       </el-table>

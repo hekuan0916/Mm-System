@@ -174,15 +174,6 @@ export default {
       this.getData()
       window.console.log('当期页码', page)
     },
-    // 表格状态
-    // tableRowClassName ({ row, rowIndex }) {
-    //   if (rowIndex === 1) {
-    //     return 'warning-row'
-    //   } else if (rowIndex === 3) {
-    //     return 'success-row'
-    //   }
-    //   return ''
-    // },
     // 表单搜索
     search () {
       this.pagination.currentPage = 1

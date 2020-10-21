@@ -2,6 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Nprogress from 'nprogress'
 import 'nprogress/nprogress.css'
+// import store from '@//store/index.js'
+// import { Message } from 'element-ui'
+// import { removeToken } from '@/utils/local'
 import login from '@/views/login/login.vue'
 import layout from '@/views/layout/layout.vue'
 import chart from '@/views/layout/chart/chart.vue'
@@ -37,6 +40,7 @@ const routes = [
         // 路由源信息
         meta: {
           title: '数据概览',
+          icon: 'el-icon-pie-chart',
           roles: ['超级管理员', '管理员', '老师']
         }
       },
@@ -46,6 +50,7 @@ const routes = [
         // 路由源信息
         meta: {
           title: '学科列表',
+          icon: 'el-icon-notebook-2',
           roles: ['超级管理员', '管理员', '老师', '学生']
         }
       },
@@ -55,6 +60,7 @@ const routes = [
         // 路由源信息
         meta: {
           title: '企业列表',
+          icon: 'el-icon-office-building',
           roles: ['超级管理员', '管理员', '老师']
         }
       },
@@ -64,6 +70,7 @@ const routes = [
         // 路由源信息
         meta: {
           title: '题库列表',
+          icon: 'el-icon-edit-outline',
           roles: ['超级管理员', '管理员', '老师']
         }
       },
@@ -73,6 +80,7 @@ const routes = [
         // 路由源信息
         meta: {
           title: '用户列表',
+          icon: 'el-icon-user',
           roles: ['超级管理员', '管理员']
         }
       }
@@ -98,7 +106,13 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   // to and from are both route objects. must call `next`.
   Nprogress.start()
+  // if (to.meta.roles.includes(store.state.role) === false) {
+  // Message.error('无权访问该页面')
+  // removeToken()
+  // next('/login')
+  // } else {
   next()
+  // }
 })
 router.afterEach((to, from) => {
   document.title = to.meta.title
