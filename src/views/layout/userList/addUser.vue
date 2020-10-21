@@ -15,16 +15,22 @@
       </el-form-item>
       <el-form-item label="角色">
         <el-select v-model="form.role_id" placeholder="请选择角色">
-          <el-option label="超级管理员" value="1">超级管理员</el-option>
-          <el-option label="管理员" value="2">管理员</el-option>
-          <el-option label="教师" value="3">教师</el-option>
-          <el-option label="学生" value="4">学生</el-option>
+          <el-option
+            v-for="(value, key, index) in roleObj"
+            :key="index"
+            :label="value"
+            :value="+key"
+          ></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="状态">
         <el-select v-model="form.status" placeholder="请选择状态">
-          <el-option label="启用" value="1"></el-option>
-          <el-option label="禁用" value="0"></el-option>
+          <el-option
+            v-for="(value, key, index) in statusList"
+            :key="index"
+            :label="value"
+            :value="+key"
+          ></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="用户备注">
@@ -64,6 +70,16 @@ export default {
   },
   data () {
     return {
+      roleObj: {
+        1: '超级管理员',
+        2: '管理员',
+        3: '教师',
+        4: '学生'
+      },
+      statusList: {
+        0: '禁用',
+        1: '启用'
+      },
       dialogFormVisible: false,
       form: {
         username: '', //  用户名

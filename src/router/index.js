@@ -32,7 +32,7 @@ const routes = [
     path: '/layout',
     // eslint-disable-next-line no-undef
     component: layout,
-    redirect: '/layout/subject',
+    redirect: '/layout/question',
     children: [
       {
         path: 'chart',

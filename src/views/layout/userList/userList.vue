@@ -191,12 +191,12 @@ export default {
     // 获取用户列表
     getList () {
       // eslint-disable-next-line no-unused-vars
-      const _pageInfo = {
+      const _query = {
         ...this.formInline,
         page: this.pagination.currentPage,
         limit: this.pagination.pageSize
       }
-      getUserList(_pageInfo).then(res => {
+      getUserList(_query).then(res => {
         this.tableData = res.data.items
         this.pagination.total = res.data.pagination.total
         // window.console.log('用户列表', res)

@@ -193,12 +193,12 @@ export default {
     // 获取列表数据
     getData () {
       // eslint-disable-next-line prefer-const
-      let _pageInfo = {
+      let _query = {
         ...this.formInline,
         page: this.pagination.currentPage,
         limit: this.pagination.pageSize
       }
-      getSubList(_pageInfo).then(res => {
+      getSubList(_query).then(res => {
         this.tableData = res.data.items
         this.pagination.total = res.data.pagination.total
         // window.console.log('获取学科列表', res)

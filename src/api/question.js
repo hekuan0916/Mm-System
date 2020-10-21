@@ -1,0 +1,18 @@
+// eslint-disable-next-line no-unused-vars
+import _fetch from '@/utils/request.js'
+
+function getQuestionList (params) {
+  return _fetch({
+    url: '/question/list',
+    params
+  })
+}
+// function registerUser (data) {
+//   return _fetch({
+//     url: '/register',
+//     method: 'post',
+//     data
+//   })
+// }
+
+export { getQuestionList }
