@@ -6,10 +6,11 @@
         :model="formInline"
         class="demo-form-inline"
         label-width="50px"
+        ref="formInline"
       >
         <el-row>
           <el-col :span="5">
-            <el-form-item label="学科">
+            <el-form-item prop="subject" label="学科">
               <el-select v-model="formInline.subject" placeholder="请选择学科">
                 <el-option
                   v-for="(item, index) in subjectList"
@@ -21,7 +22,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="5">
-            <el-form-item label="阶段">
+            <el-form-item prop="step" label="阶段">
               <el-select v-model="formInline.step" placeholder="请选择阶段">
                 <el-option
                   v-for="(value, key, index) in objStep"
@@ -33,7 +34,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="5">
-            <el-form-item label="企业">
+            <el-form-item prop="enterprise" label="企业">
               <el-select
                 v-model="formInline.enterprise"
                 placeholder="请选择企业"
@@ -48,7 +49,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="5">
-            <el-form-item label="题型">
+            <el-form-item prop="type" label="题型">
               <el-select v-model="formInline.type" placeholder="请选择题型">
                 <el-option
                   v-for="(value, key, index) in objType"
@@ -62,13 +63,13 @@
         </el-row>
         <el-row>
           <el-col :span="5">
-            <el-form-item label="难度">
+            <el-form-item prop="difficulty" label="难度">
               <el-select
                 v-model="formInline.difficulty"
                 placeholder="请选择难度"
               >
                 <el-option
-                  v-for="(value, key, index) in Objdiff"
+                  v-for="(value, key, index) in objDiff"
                   :key="index"
                   :label="value"
                   :value="key"
@@ -77,7 +78,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="5">
-            <el-form-item label="阶段">
+            <el-form-item prop="username" label="阶段">
               <el-input
                 v-model="formInline.username"
                 placeholder="请输入作者"
@@ -85,7 +86,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="5">
-            <el-form-item label="状态">
+            <el-form-item prop="status" label="状态">
               <el-select v-model="formInline.status" placeholder="请选择状态">
                 <el-option label="禁用" :value="0"></el-option>
                 <el-option label="启用" :value="1"></el-option>
@@ -93,7 +94,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="5">
-            <el-form-item label="日期">
+            <el-form-item prop="create_date" label="日期">
               <el-date-picker
                 v-model="formInline.create_date"
                 placeholder="请选择日期"
@@ -103,21 +104,23 @@
         </el-row>
         <el-row>
           <el-col :span="10">
-            <el-form-item label="标题">
+            <el-form-item prop="title" label="标题">
               <el-input v-model="formInline.title" placeholder="请输入标题" />
             </el-form-item>
           </el-col>
           <el-col :span="14">
             <el-form-item>
-              <el-button class="btn" type="primary">搜索</el-button>
-              <el-button>清除</el-button>
-              <el-button type="primary">+新增试题</el-button>
+              <el-button class="btn" type="primary" @click="search"
+                >搜索</el-button
+              >
+              <el-button @click="reset">清除</el-button>
+              <el-button type="primary" @click="add">+新增试题</el-button>
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
     </el-card>
-    <el-card>
+    <el-card class="tableCard">
       <el-table :data="tableData" border style="width: 100%">
         <el-table-column label="序号" width="50">
           <template v-slot="scope"> {{ scope.$index + 1 }}</template>
@@ -139,34 +142,59 @@
         <el-table-column prop="username" label="创建者"> </el-table-column>
         <el-table-column prop="status" label="状态">
           <template v-slot="scope">
-            {{ scope.row.status == 0 ? '禁用' : '启用' }}
+            {{ scope.row.status == 0 ? 'X' : '√' }}
           </template>
         </el-table-column>
         <el-table-column prop="reads" label="访问量"> </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" width="250">
           <template v-slot="scope">
-            <el-button>添加</el-button>
-            <el-button>{{ scope.row.status == 1 ? '禁用' : '启用' }}</el-button>
-            <el-button>删除</el-button>
+            <el-button type="primary" icon="el-icon-edit" circle></el-button>
+            <el-button type="success" circle>{{
+              scope.row.status == 1 ? 'X' : '√'
+            }}</el-button>
+            <el-button type="danger" icon="el-icon-delete" circle></el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-card>
+    <el-card class="pagination">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="pagination.currentPage"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="pagination.pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="pagination.total"
+      >
+      </el-pagination>
+    </el-card>
+    <addQuestion
+      ref="addQuestion"
+      :subjectList="subjectList"
+      :objStep="objStep"
+      :businessList="businessList"
+      :objType="objType"
+      :objDiff="objDiff"
+    ></addQuestion>
   </div>
 </template>
 <script>
 import { getSubList } from '@/api/subject'
 import { getBusinessList } from '@/api/business'
 import { getQuestionList } from '@/api/question'
+import addQuestion from './addQuestion'
 export default {
+  // eslint-disable-next-line vue/no-unused-components
+  components: { addQuestion },
   data () {
     return {
       formInline: {
         subject: '', // 否 int 学科id
         step: '', // 否 string 题目阶段:1(初级),2(中级),3(高级)
         enterprise: '', // 否 int 企业id
-        type: '', // 否 int 题目类型:1(单选),2(多选),3(简答)
-        difficulty: '', // 否 int 题目难度: 1(简单),2(一般),3(困难)
+        type: null, // 否 int 题目类型:1(单选),2(多选),3(简答)
+        difficulty: null, // 否 int 题目难度: 1(简单),2(一般),3(困难)
         username: '', // 否 string 作者
         status: '', // 否 int 状态:0(禁用),1(启用)
         create_date: '', // 否 string 创建日期
@@ -175,7 +203,7 @@ export default {
         limit: '' // 否 string 页尺寸 默认为10
       },
       subjectList: [], // 学科列表
-      businessList: [], // 学科列表
+      businessList: [], // 企业列表
       objStep: {
         1: '初级',
         2: '中级',
@@ -186,35 +214,66 @@ export default {
         2: '多选',
         3: '简答'
       },
-      Objdiff: {
+      objDiff: {
         1: '简单',
         2: '一般',
         3: '困难'
       },
-      tableData: []
+      tableData: [],
+      pagination: {
+        currentPage: 1,
+        pageSize: 10,
+        total: 10
+      }
     }
   },
   methods: {
-    onSubmit () {
-      console.log('submit!')
+    // 新增
+    add () {
+      this.$refs.addQuestion.isShow = true
     },
+    // 搜索
+    search () {
+      this.pagination.currentPage = 1
+      this.getList()
+    },
+    // 清空表单
+    reset () {
+      this.$refs.formInline.resetFields()
+      this.search()
+    },
+    // 当前页码改变
+    handleCurrentChange (page) {
+      this.pagination.currentPage = page
+      this.getList()
+    },
+    // 页容量改变
+    handleSizeChange (size) {
+      this.pagination.pageSize = size
+      this.pagination.currentPage = 1
+      this.getList()
+    },
+    // 获取列表
     getList () {
       const _query = {
         ...this.formInline,
-        page: 1,
-        limit: 1
+        page: this.pagination.currentPage,
+        limit: this.pagination.pageSize
       }
       getQuestionList(_query).then(res => {
         this.tableData = res.data.items
+        this.pagination.total = res.data.pagination.total
         window.console.log('题库列表', res)
       })
     }
   },
   created () {
+    // 获取学科列表
     getSubList().then(res => {
       this.subjectList = res.data.items
       // window.console.log('获取学科列表', res)
     })
+    // 获取企业列表
     getBusinessList().then(res => {
       this.businessList = res.data.items
       // window.console.log('获取企业列表', res)
@@ -224,4 +283,14 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="less">
+.question {
+  .tableCard {
+    margin-top: 10px;
+  }
+  .pagination {
+    margin-top: 5px;
+    text-align: center;
+  }
+}
+</style>
