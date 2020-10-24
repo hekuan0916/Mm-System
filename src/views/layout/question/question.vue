@@ -123,7 +123,13 @@
     <el-card class="tableCard">
       <el-table :data="tableData" border style="width: 100%">
         <el-table-column label="序号" width="50">
-          <template v-slot="scope"> {{ scope.$index + 1 }}</template>
+          <template v-slot="scope">
+            {{
+              (pagination.currentPage - 1) * pagination.pageSize +
+                scope.$index +
+                1
+            }}</template
+          >
         </el-table-column>
         <el-table-column prop="title" label="题目">
           <template v-slot="scope">
@@ -148,11 +154,21 @@
         <el-table-column prop="reads" label="访问量"> </el-table-column>
         <el-table-column label="操作" width="250">
           <template v-slot="scope">
-            <el-button type="primary" icon="el-icon-edit" circle></el-button>
-            <el-button type="success" circle>{{
+            <el-button
+              @click="edit(scope.row)"
+              type="primary"
+              icon="el-icon-edit"
+              circle
+            ></el-button>
+            <el-button type="success" circle @click="setStatus(scope.row.id)">{{
               scope.row.status == 1 ? 'X' : '√'
             }}</el-button>
-            <el-button type="danger" icon="el-icon-delete" circle></el-button>
+            <el-button
+              type="danger"
+              icon="el-icon-delete"
+              @click="del(scope.row.id)"
+              circle
+            ></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -176,25 +192,28 @@
       :businessList="businessList"
       :objType="objType"
       :objDiff="objDiff"
+      @search="search"
+      :mode="mode"
     ></addQuestion>
   </div>
 </template>
 <script>
 import { getSubList } from '@/api/subject'
 import { getBusinessList } from '@/api/business'
-import { getQuestionList } from '@/api/question'
+import { getQuestionList, statusQuestion, delQuestion } from '@/api/question'
 import addQuestion from './addQuestion'
 export default {
   // eslint-disable-next-line vue/no-unused-components
   components: { addQuestion },
   data () {
     return {
+      mode: 'add',
       formInline: {
         subject: '', // 否 int 学科id
         step: '', // 否 string 题目阶段:1(初级),2(中级),3(高级)
         enterprise: '', // 否 int 企业id
-        type: null, // 否 int 题目类型:1(单选),2(多选),3(简答)
-        difficulty: null, // 否 int 题目难度: 1(简单),2(一般),3(困难)
+        type: 1, // 否 int 题目类型:1(单选),2(多选),3(简答)
+        difficulty: 1, // 否 int 题目难度: 1(简单),2(一般),3(困难)
         username: '', // 否 string 作者
         status: '', // 否 int 状态:0(禁用),1(启用)
         create_date: '', // 否 string 创建日期
@@ -228,9 +247,36 @@ export default {
     }
   },
   methods: {
+    // 设置状态
+    setStatus (id) {
+      statusQuestion({ id }).then(res => {
+        this.$message.success('设置状态成功~')
+        this.getList()
+      })
+    },
+    // 删除
+    del (id) {
+      this.$confirm('此操作将删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        delQuestion({ id }).then(() => {
+          this.$message.success('删除成功~')
+          this.getList()
+        })
+      })
+    },
     // 新增
     add () {
+      this.mode = 'add'
       this.$refs.addQuestion.isShow = true
+    },
+    // 编辑
+    edit (row) {
+      this.mode = 'edit'
+      this.$refs.addQuestion.isShow = true
+      this.$refs.addQuestion.formInline = JSON.parse(JSON.stringify(row))
     },
     // 搜索
     search () {
@@ -261,7 +307,14 @@ export default {
         limit: this.pagination.pageSize
       }
       getQuestionList(_query).then(res => {
-        this.tableData = res.data.items
+        // eslint-disable-next-line no-unused-vars
+
+        const _temp = res.data.items
+        _temp.forEach(item => {
+          item.city = item.city.split(',')
+          item.multiple_select_answer = item.multiple_select_answer.split(',')
+        })
+        this.tableData = _temp
         this.pagination.total = res.data.pagination.total
         window.console.log('题库列表', res)
       })

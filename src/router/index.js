@@ -5,7 +5,6 @@ import 'nprogress/nprogress.css'
 // import store from '@//store/index.js'
 // import { Message } from 'element-ui'
 // import { removeToken } from '@/utils/local'
-import login from '@/views/login/login.vue'
 import layout from '@/views/layout/layout.vue'
 import chart from '@/views/layout/chart/chart.vue'
 import subject from '@/views/layout/subject/subject.vue'
@@ -18,6 +17,7 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
+    // 路由重定向
     redirect: '/login',
     meta: {
       title: '登录',
@@ -26,7 +26,7 @@ const routes = [
   },
   {
     path: '/login',
-    component: login
+    component: () => import('@/views/login/login.vue')
   },
   {
     path: '/layout',

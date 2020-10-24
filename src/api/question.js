@@ -7,12 +7,41 @@ function getQuestionList (params) {
     params
   })
 }
-// function registerUser (data) {
-//   return _fetch({
-//     url: '/register',
-//     method: 'post',
-//     data
-//   })
-// }
+function addQuestion (data) {
+  return _fetch({
+    url: '/question/add',
+    method: 'post',
+    data
+  })
+}
 
-export { getQuestionList }
+function editQuestion (data) {
+  return _fetch({
+    url: '/question/edit',
+    method: 'post',
+    data
+  })
+}
+function statusQuestion (data) {
+  return _fetch({
+    url: '/question/assttu',
+    method: 'post',
+    data
+  })
+}
+
+function delQuestion (data) {
+  return _fetch({
+    url: '/question/remove',
+    method: 'post',
+    data
+  })
+}
+
+export {
+  getQuestionList,
+  addQuestion,
+  editQuestion,
+  statusQuestion,
+  delQuestion
+}
